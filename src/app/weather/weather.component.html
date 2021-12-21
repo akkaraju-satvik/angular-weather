@@ -1,0 +1,39 @@
+<div class="container d-flex justify-content-center" id="weather" *ngIf="!error; else errorTemplate">
+    <div id="weatherContainer" class="col-6 p-5 d-flex justify-content-between" *ngIf="weatherData !== undefined; else weather">
+        <div class="col-6">
+            <div class="col-12 mb-3 d-flex align-items-center justify-content-space-around" *ngIf="weatherData.currentLocation === true">
+                <img src="../../assets/current-location.svg" alt="Current Location" class="img-fluid currentLocation">
+                <span class="d-flex align-items-center p-0" id="current-location">&nbsp; Current Location</span>
+            </div>
+            <p class="h4">
+                {{weatherData.name}}<span *ngIf="weatherData.currentLocation === false">, {{weatherData.country}}</span>
+            </p>
+            <p class="display-4">
+                <strong>{{weatherData.temp}}<sup> °c</sup></strong>
+            </p>
+            <p><small>Feels like {{weatherData.feels_like}}°C</small></p>
+            <p class="lead" *ngIf="weatherData.weather !== undefined">{{weatherData.weather.description}}</p>
+        </div>
+        <div class="col-4 d-flex justify-content-center align-items-center">
+            <img src={{weatherData.weather.icon}} class="img-fluid img" *ngIf="weatherData.weather !== undefined" alt={{weatherData.weather.description}}>
+        </div>
+    </div>
+</div>
+
+<ng-template #weather>
+    <div id="spinner" class="col-12 d-flex flex-column align-items-center p-3 justify-content-space-around" >
+        <div class="spinner-border" role="status">
+        </div>
+        <p class="h6 mt-3">
+           Loading... 
+        </p>
+    </div>
+</ng-template>
+
+<ng-template #errorTemplate>
+    <div id="error" class="col-12 d-flex p-3 justify-content-center">
+        <div class="alert alert-danger" role="alert">
+            <strong>Error!</strong> {{error?.message}}
+        </div>
+    </div>
+</ng-template>
