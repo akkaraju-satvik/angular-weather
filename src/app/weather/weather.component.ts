@@ -17,7 +17,6 @@ export class WeatherComponent implements OnInit {
   
   ngOnInit(): void {
     this._serveData.weatherData.subscribe(data => {
-      console.log(data)
       if(data) {
         this.weatherData = {
           currentLocation: false,
@@ -35,7 +34,6 @@ export class WeatherComponent implements OnInit {
     
     navigator.geolocation.getCurrentPosition((position): void => {
       this._weatherService.getWeather({ latitude: position.coords.latitude, longitude: position.coords.longitude }).subscribe(data => {
-        console.log(data)
         this.weatherData = {
           currentLocation: true,
           temp: Number(data.main.temp.toFixed(0)),
@@ -49,7 +47,6 @@ export class WeatherComponent implements OnInit {
       });
     }, error => {
       this.error = error;
-      console.log(error)
     })
   }
 }
