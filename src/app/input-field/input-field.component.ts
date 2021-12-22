@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
   templateUrl: './input-field.component.html',
   styleUrls: ['./input-field.component.css']
 })
+
 export class InputFieldComponent implements OnInit {
 
   constructor(private _weatherService: WeatherService, private _serveData: ServeDataService, private router: Router) { }
@@ -18,9 +19,9 @@ export class InputFieldComponent implements OnInit {
   getWeather(e: Event) {
     e.preventDefault();
     const cityName = document.querySelector('#cityName') as HTMLInputElement;
-    this._serveData.acceptData(undefined)
+    this._serveData.sendData(undefined)
     this._weatherService.getWeatherFromCityName(cityName.value).subscribe(data => {
-      this._serveData.acceptData(data);
+      this._serveData.sendData(data);
     })
     this.router.navigateByUrl('/weather/' + cityName.value + '/');
     cityName.value = ''

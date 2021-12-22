@@ -11,8 +11,19 @@ export class WeatherService {
 
   constructor(private http: HttpClient) { }
 
-  getWeather({ latitude, longitude }: { latitude: number; longitude: number; }): Observable<WeatherDataRaw> {
-    return this.http.get<WeatherDataRaw>(`http://${environment.ROOT_URL}/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${environment.apiKey}&units=metric`);
+  getPosition(): Promise<GeolocationPosition> {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(position => {
+        resolve(position);
+      }, error => {
+        reject(error);
+      });
+    });
+  }
+
+  async getWeather(): Promise<Observable<WeatherDataRaw>> {
+    const position = await this.getPosition();
+    return this.http.get<WeatherDataRaw>(`http://${environment.ROOT_URL}/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${environment.apiKey}&units=metric`);
   }
 
   getWeatherFromCityName(cityName: string): Observable<WeatherDataRaw> {

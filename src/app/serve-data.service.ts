@@ -7,12 +7,12 @@ import { WeatherDataRaw } from './weather/WeatherDataRaw';
 })
 export class ServeDataService {
 
-  private _data = new BehaviorSubject<WeatherDataRaw | undefined>({} as WeatherDataRaw);
+  private _data = new BehaviorSubject<WeatherDataRaw | undefined>(undefined);
   weatherData = this._data.asObservable()
 
   constructor() { }
 
-  acceptData(data: WeatherDataRaw | undefined) {
+  sendData(data: WeatherDataRaw | undefined) {
     this._data.next(data)
   }
 }

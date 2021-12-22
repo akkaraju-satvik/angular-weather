@@ -6,5 +6,5 @@ export interface WeatherData {
     feels_like: Number | undefined,
     name: String | undefined,
     weather: Weather | undefined,
-    country?: String | undefined,
+    country: String,
 }
