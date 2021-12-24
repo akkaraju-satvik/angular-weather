@@ -1,12 +1,12 @@
-<div class="container d-flex justify-content-center" id="weather" *ngIf="!error; else errorTemplate">
-    <div id="weatherContainer" class="col-6 p-5 d-flex justify-content-between" *ngIf="weatherData !== undefined; else weather">
+<div class="container d-flex justify-content-center" id="weather" *ngIf="!isPositionError && !isHttpError">
+    <div id="weatherContainer" class="col-6 p-5 d-flex justify-content-between" *ngIf="weatherData !== undefined && !_serveData.loadState; else weather">
         <div class="col-6">
-            <div class="col-12 mb-3 d-flex align-items-center justify-content-space-around" *ngIf="weatherData.currentLocation === true">
+            <div class="col-12 mb-3 d-flex align-items-center justify-content-space-around" *ngIf="weatherData.currentLocation">
                 <img src="../../assets/current-location.svg" alt="Current Location" class="img-fluid currentLocation">
                 <span class="d-flex align-items-center p-0" id="current-location">&nbsp; Current Location</span>
             </div>
             <p class="h4">
-                {{weatherData.name}}<span *ngIf="weatherData.currentLocation === false">, {{weatherData.country}}</span>
+                {{weatherData.name}}<span *ngIf="!weatherData.currentLocation">, {{weatherData.country}}</span>
             </p>
             <p class="display-4">
                 <strong>{{weatherData.temp}}<sup> °c</sup></strong>
@@ -19,21 +19,32 @@
         </div>
     </div>
 </div>
+<div id="error" *ngIf="isPositionError" class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center flex-column text-center alert alert-danger" role="alert">
+        <strong>Couldn't get your location!</strong>
+        <span class="text-center" *ngIf="this.positionError?.code === 1">
+            Please allow location services or search for a city name.
+        </span>
+        <span *ngIf="this.positionError?.code === 2 || this.positionError?.code === 3">
+            Location could not be fetched. Please try again.
+        </span>
+    </div>
+</div>
+<div *ngIf="isHttpError" id="httpError" class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center flex-column text-center alert alert-danger" role="alert">
+        <strong>Couldn't get weather data!</strong>
+        <span class="text-center">
+            Please check the city name and try again.
+        </span>
+    </div>
+</div>
 
 <ng-template #weather>
-    <div id="spinner" class="col-12 d-flex flex-column align-items-center p-3 justify-content-space-around" >
+    <div *ngIf="_serveData.loadState === true" id="spinner" class="col-12 d-flex flex-column align-items-center p-3 justify-content-space-around" >
         <div class="spinner-border" role="status">
         </div>
         <p class="h6 mt-3">
            Loading... 
         </p>
-    </div>
-</ng-template>
-
-<ng-template #errorTemplate>
-    <div id="error" class="col-12 d-flex p-3 justify-content-center">
-        <div class="alert alert-danger" role="alert">
-            <strong>Error!</strong> {{error?.message}}
-        </div>
     </div>
 </ng-template>

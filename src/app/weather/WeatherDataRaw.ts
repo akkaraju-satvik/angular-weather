@@ -1,5 +1,3 @@
-import { Weather } from "./Weather";
-
 export interface WeatherDataRaw {
     coord: Object,
     clouds: Object,
@@ -25,6 +23,9 @@ export interface WeatherDataRaw {
     },
     timezone: Number,
     visibility: Number,
-    weather: Weather[],
+    weather: {
+        description: String,
+        icon: String,
+    }[],
     wind: Object,
 }

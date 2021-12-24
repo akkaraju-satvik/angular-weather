@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ServeDataService } from '../serve-data.service';
 import {WeatherService} from '../weather.service';
 import { Router } from '@angular/router';
+import { ChartDataService } from '../chart-data.service';
 
 @Component({
   selector: 'app-input-field',
@@ -11,7 +12,7 @@ import { Router } from '@angular/router';
 
 export class InputFieldComponent implements OnInit {
 
-  constructor(private _weatherService: WeatherService, private _serveData: ServeDataService, private router: Router) { }
+  constructor(private _weatherService: WeatherService, private _serveData: ServeDataService, private router: Router, private chartData: ChartDataService) { }
 
   ngOnInit(): void {
   }
@@ -19,11 +20,33 @@ export class InputFieldComponent implements OnInit {
   getWeather(e: Event) {
     e.preventDefault();
     const cityName = document.querySelector('#cityName') as HTMLInputElement;
-    this._serveData.sendData(undefined)
-    this._weatherService.getWeatherFromCityName(cityName.value).subscribe(data => {
-      this._serveData.sendData(data);
-    })
-    this.router.navigateByUrl('/weather/' + cityName.value + '/');
+    let cityVal = cityName.value;
+    this._serveData.loadState = true;
+    this.router.navigateByUrl('/'+cityVal);
+    this.chartData.getData(cityVal).subscribe(
+      {
+        next: data => {
+          this.chartData.serveData(data);
+        },
+        error: error => {
+          this.chartData.serveData(error);
+        }
+      }
+    )
+    this._weatherService.getWeatherFromCityName(cityName.value).subscribe(
+      {
+        next:data => {
+          this._serveData.loadState = false;
+          this._serveData.sendData(data);
+        },
+        error: error => {
+          cityName.value = cityVal
+          cityName.focus()
+          this._serveData.loadState = false;
+          this._serveData.sendData(error)
+        }
+      }
+    )
     cityName.value = ''
     cityName.blur()
   }

@@ -1,0 +1,14 @@
+<div class="container text-center" *ngIf="data.type === 'positionError'">
+    <strong mat-dialog-title>Could not get your location</strong>
+    <span mat-dialog-content *ngIf="data.error.code === 1">Please allow location services and try again</span>
+    <span mat-dialog-content *ngIf="data.error.code === 2 || data.error.code === 3">
+        Location could not be fetched. Please try again.
+    </span>
+    <button class="mt-3" mat-raised-button mat-dialog-close>OK, got it</button>
+</div>
+
+<div class="container text-center" *ngIf="data.type === 'httpError'">
+    <strong mat-dialog-title>Could not get weather data</strong>
+    <span mat-dialog-content>Please check the city name and try again</span>
+    <button class="mt-3" mat-raised-button mat-dialog-close>OK, got it</button>
+</div>

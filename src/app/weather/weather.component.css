@@ -1,14 +1,10 @@
-#weather, #error {
+#weather, #error, #httpError {
     padding-top: 15vh;
 }
 
 #weatherContainer {
     border: 2px solid black;
     border-radius: 15px;
-}
-
-#error {
-    margin-top: 15vh;
 }
 
 .currentLocation {
