@@ -41,7 +41,6 @@ export class InputFieldComponent implements OnInit {
         },
         error: error => {
           cityName.value = cityVal
-          cityName.focus()
           this._serveData.loadState = false;
           this._serveData.sendData(error)
         }

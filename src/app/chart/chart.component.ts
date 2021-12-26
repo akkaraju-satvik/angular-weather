@@ -37,7 +37,6 @@ export class ChartComponent implements OnInit {
   constructor(public chartData: ChartDataService, public location: Location) { }
 
   setChartData(data: ChartData) {
-    console.log('hi')
     this.lineChartData = {
       datasets: data.data.map(dataset => {
         return {
@@ -56,7 +55,6 @@ export class ChartComponent implements OnInit {
   }
 
   setError() {
-    console.log('error')
     this.error = true;
     this.chartData.loadState = false;
   }
@@ -66,7 +64,7 @@ export class ChartComponent implements OnInit {
       this.chartData.getData(this.location.path().slice(1)).subscribe(
         {
           next: (data) => {
-            console.log(data)
+            if(!data) {this.chartData.loadState = false; return}
             if(this.error) this.error = false;
             data ? this.setChartData(data) : this.setError()
           },
@@ -77,7 +75,6 @@ export class ChartComponent implements OnInit {
     this.chartData.chartData.subscribe(
       {
         next: (data) => {
-          console.log(data)
           if(data instanceof HttpErrorResponse) {
             this.setError()
             return;

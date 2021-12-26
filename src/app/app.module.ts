@@ -14,6 +14,9 @@ import { ErrorComponent } from './error/error.component';
 import { CommonModule } from '@angular/common';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartComponent } from './chart/chart.component';
+import { ShowKeyComponent } from './show-key/show-key.component';
+import { AuthGuard } from './auth.guard';
+import { NotAuthComponent } from './not-auth/not-auth.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,7 @@ import { ChartComponent } from './chart/chart.component';
     InputFieldComponent,
     ErrorComponent,
     ChartComponent,
+    ShowKeyComponent,
   ],
   imports: [
     CommonModule,
@@ -32,7 +36,7 @@ import { ChartComponent } from './chart/chart.component';
     MatButtonModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot([{path: '', component: WeatherComponent}, {path: ':cityName', component: WeatherComponent}]),
+    RouterModule.forRoot([{path: 'notAuthorized', component: NotAuthComponent}, {path: 'getKey', component: ShowKeyComponent, canActivate: [AuthGuard]},{path: '', component: WeatherComponent}, {path: ':cityName', component: WeatherComponent}]),
     NgChartsModule 
   ],
   providers: [],

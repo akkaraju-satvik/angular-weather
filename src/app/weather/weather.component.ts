@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { take } from 'rxjs';
 import { ErrorComponent } from '../error/error.component';
 import { ServeDataService } from '../serve-data.service';
 import { WeatherService } from '../weather.service';
@@ -63,12 +64,11 @@ export class WeatherComponent implements OnInit {
       }, error => {
         this.dialog.open(ErrorComponent, {data: {type: 'positionError', error: error}});
         this.positionError = error;
-        this.isPositionError = true;
-        this._serveData.loadState = false;
+        this.isPositionError = true; this._serveData.loadState = false;
       })
     } else {
       this._serveData.loadState = true
-      this._weatherService.getWeatherFromCityName(this.router.url.slice(1)).subscribe(
+      this._weatherService.getWeatherFromCityName(this.router.url.slice(1)).pipe(take(2)).subscribe(
         {
           next: data => {
             if(this.isHttpError) this.resetHttpError()
